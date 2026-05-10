@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="WizeTravel"/>
+<meta name="theme-color" content="#030508"/>
 <title>WizeTravel — מכין את הטיסות שלך</title>
 <link rel="preconnect" href="https://wizetravel-next.vercel.app">
 <link rel="preconnect" href="https://ofirofir-wizetravel.hf.space" crossorigin>
@@ -10,32 +14,39 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%;background:#030508;overflow:hidden;color:#eef2ff;font-family:'Inter',-apple-system,system-ui,sans-serif}
-  #app-frame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#030508;z-index:1}
-  #wt-ob{position:fixed;inset:0;z-index:99997;display:flex;align-items:center;justify-content:center;background:rgba(5,8,20,0.6);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);padding:20px;font-family:Inter,-apple-system,system-ui,sans-serif}
-  #wt-ob.gone{display:none}
-  #wt-ob-card{position:relative;width:100%;max-width:340px;background:linear-gradient(180deg,#0f1426 0%,#0a0e1a 100%);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:28px 24px 22px;box-shadow:0 32px 96px rgba(0,0,0,0.55), 0 0 0 1px rgba(6,182,212,0.18)}
-  #wt-ob-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#06b6d4,#3b82f6);display:flex;align-items:center;justify-content:center;margin:8px auto 18px;font-size:30px;color:#fff;box-shadow:0 8px 32px rgba(6,182,212,0.35)}
-  #wt-ob h3{margin:0 0 8px;color:#f0f4ff;font-size:18px;font-weight:800;text-align:center;letter-spacing:-0.4px;font-family:'Plus Jakarta Sans',Inter,sans-serif}
-  #wt-ob p{margin:0 0 22px;color:rgba(255,255,255,0.62);font-size:13.5px;line-height:1.55;text-align:center}
-  #wt-ob .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  #wt-ob .skip{background:none;border:none;color:rgba(255,255,255,0.45);font-size:13px;cursor:pointer;padding:8px 12px;font-family:inherit;border-radius:8px}
-  #wt-ob .next{background:#06b6d4;border:none;color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;padding:10px 20px;border-radius:99px;font-family:inherit;box-shadow:0 6px 20px rgba(6,182,212,0.55)}
-  #wt-ob .close{position:absolute;top:14px;left:14px;background:none;border:none;color:rgba(255,255,255,0.55);font-size:18px;cursor:pointer;padding:4px 8px;line-height:1;font-family:inherit;border-radius:8px}
+
+  #app-frame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#030508;z-index:1;opacity:0;transition:opacity .3s ease}
+  #app-frame.ready{opacity:1}
+
+  #wt-splash{position:fixed;inset:0;z-index:99996;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#1a2138 0%,#0a0e1a 100%);font-family:'Plus Jakarta Sans','Inter',system-ui,sans-serif;transition:opacity .35s ease}
+  #wt-splash.gone{opacity:0;pointer-events:none}
+  .wt-card{display:flex;flex-direction:column;align-items:center;gap:14px;padding:24px;text-align:center}
+  .wt-icon{width:68px;height:68px;border-radius:18px;background:linear-gradient(135deg,#06b6d4,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;box-shadow:0 12px 40px rgba(6,182,212,0.45)}
+  .wt-brand{font-size:28px;font-weight:900;letter-spacing:-1px;color:#f0f4ff}
+  .wt-brand em{background:linear-gradient(135deg,#06b6d4,#3b82f6);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:normal}
+  .wt-tag{font-size:13px;color:rgba(255,255,255,0.55);max-width:260px;line-height:1.55}
+  .wt-bar{width:120px;height:3px;border-radius:99px;background:rgba(255,255,255,0.08);overflow:hidden;margin-top:6px}
+  .wt-bar i{display:block;width:30%;height:100%;background:linear-gradient(90deg,#06b6d4,#3b82f6);border-radius:99px;animation:wtBar 1.2s ease-in-out infinite}
+  @keyframes wtBar{0%{transform:translateX(-100%)}100%{transform:translateX(420%)}}
+
+  .wt-ob-extra{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:10px;max-width:300px}
+  .wt-ob-extra p{font-size:12.5px;color:rgba(255,255,255,0.5);line-height:1.55;text-align:center}
+  .wt-ob-extra button{background:rgba(6,182,212,0.18);color:#a5f3fc;border:1px solid rgba(6,182,212,0.4);padding:8px 18px;border-radius:99px;font:700 12px inherit;cursor:pointer}
 </style>
 </head>
 <body>
 
 <iframe id="app-frame" src="" allow="clipboard-write; clipboard-read; geolocation"></iframe>
 
-<div id="wt-ob" hidden>
-  <div id="wt-ob-card">
-    <button class="close" onclick="wtObDismiss()" aria-label="סגור">✕</button>
-    <div id="wt-ob-icon">✈️</div>
-    <h3 id="wt-ob-title">WizeTravel</h3>
-    <p id="wt-ob-sub">תכנון נסיעות AI — טיסות, מלונות, ויזות ודילים בזמן אמת.</p>
-    <div class="row">
-      <button class="skip" onclick="wtObDismiss()" id="wt-ob-skip">דלג</button>
-      <button class="next" onclick="wtObDismiss()" id="wt-ob-next">הבנתי</button>
+<div id="wt-splash">
+  <div class="wt-card">
+    <div class="wt-icon">✈️</div>
+    <div class="wt-brand">Wize<em>Travel</em></div>
+    <div class="wt-tag" id="wt-tag">מחפש את הטיסות הכי טובות עבורך...</div>
+    <div class="wt-bar"><i></i></div>
+    <div class="wt-ob-extra" id="wt-ob-extra" hidden>
+      <p id="wt-ob-text">תכנון נסיעות AI — טיסות, מלונות, ויזות ודילים בזמן אמת.</p>
+      <button onclick="wtDismiss(true)" id="wt-ob-btn">הבנתי</button>
     </div>
   </div>
 </div>
@@ -45,40 +56,48 @@
   try { fetch('https://ofirofir-wizetravel.hf.space/', { mode: 'no-cors', cache: 'no-cache' }).catch(function(){}); } catch (e) {}
 
   var TARGET = 'https://wizetravel-next.vercel.app/';
-  var p = new URLSearchParams(location.search);
+  var p  = new URLSearchParams(location.search);
   var qs = new URLSearchParams();
   ['wl_token','wl_nick','wl_plan','lang'].forEach(function (k) {
     var v = p.get(k); if (v) qs.set(k, v);
   });
-  var url = qs.toString() ? TARGET + '?' + qs.toString() : TARGET;
-  document.getElementById('app-frame').src = url;
+  var iframe = document.getElementById('app-frame');
+  iframe.src = qs.toString() ? TARGET + '?' + qs.toString() : TARGET;
 
-  var lang  = (function(){ try { return (localStorage.getItem('wl_lang') || 'he').slice(0,2); } catch(e){ return 'he'; } })();
+  var lang = (function(){ try { return (localStorage.getItem('wl_lang') || 'he').slice(0,2); } catch(e){ return 'he'; } })();
+  var COPY = {
+    he: { tag:'מחפש את הטיסות הכי טובות עבורך...', ob:'תכנון נסיעות AI — טיסות, מלונות, ויזות ודילים בזמן אמת.', btn:'הבנתי' },
+    en: { tag:'Hunting the best flights for you...', ob:'AI travel planner — flights, hotels, visas, real-time deals.', btn:'Got it' },
+    pt: { tag:'Buscando os melhores voos para você...', ob:'Planejador de viagens com IA — voos, hotéis, vistos, ofertas em tempo real.', btn:'Entendi' },
+    es: { tag:'Buscando los mejores vuelos para ti...', ob:'Planificador de viajes con IA — vuelos, hoteles, visados, ofertas en tiempo real.', btn:'Listo' },
+  };
+  var c = COPY[lang] || COPY.en;
+  document.getElementById('wt-tag').textContent = c.tag;
+
   var force = (p.get('ob') === 'force');
   var seen  = false;
   try { seen = !!localStorage.getItem('wl_ob_travel'); } catch(e){}
-
-  if (force || !seen) {
-    var COPY = {
-      he: { t:'WizeTravel', s:'תכנון נסיעות AI — טיסות, מלונות, ויזות ודילים בזמן אמת.', skip:'דלג', next:'הבנתי' },
-      en: { t:'WizeTravel', s:'AI travel planner — flights, hotels, visas, real-time deals.', skip:'Skip', next:'Got it' },
-      pt: { t:'WizeTravel', s:'Planejador de viagens com IA — voos, hotéis, vistos, ofertas em tempo real.', skip:'Pular', next:'Entendi' },
-      es: { t:'WizeTravel', s:'Planificador de viajes con IA — vuelos, hoteles, visados, ofertas en tiempo real.', skip:'Saltar', next:'Listo' },
-    };
-    var c = COPY[lang] || COPY.en;
-    document.getElementById('wt-ob-title').textContent = c.t;
-    document.getElementById('wt-ob-sub').textContent   = c.s;
-    document.getElementById('wt-ob-skip').textContent  = c.skip;
-    document.getElementById('wt-ob-next').textContent  = c.next;
-    document.getElementById('wt-ob').hidden = false;
-    setTimeout(function () { wtObDismiss(); }, 8000);
+  if (!seen || force) {
+    document.getElementById('wt-ob-text').textContent = c.ob;
+    document.getElementById('wt-ob-btn').textContent  = c.btn;
+    document.getElementById('wt-ob-extra').hidden = false;
   }
+
+  iframe.addEventListener('load', function () {
+    setTimeout(function () { wtDismiss(false); }, 350);
+  }, { once: true });
+  setTimeout(function () { wtDismiss(false); }, 8000);
 })();
 
-function wtObDismiss() {
-  try { localStorage.setItem('wl_ob_travel', '1'); } catch(e){}
-  var el = document.getElementById('wt-ob');
-  if (el) el.classList.add('gone');
+function wtDismiss(markSeen) {
+  if (markSeen) {
+    try { localStorage.setItem('wl_ob_travel', '1'); } catch(e){}
+  }
+  var s = document.getElementById('wt-splash');
+  var i = document.getElementById('app-frame');
+  if (i) i.classList.add('ready');
+  if (s) s.classList.add('gone');
+  setTimeout(function () { if (s && s.parentNode) s.parentNode.removeChild(s); }, 400);
 }
 </script>
 
