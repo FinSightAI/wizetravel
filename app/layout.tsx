@@ -9,7 +9,15 @@ export const metadata: Metadata = {
  metadataBase: new URL('https://travel.wizelife.ai'),
  title: 'Cheap Flights & AI Travel Planner — Compare in Seconds | WizeTravel',
  description: 'Find cheap flights and build full trips with AI. Compare airlines, hotels and routes in 4 languages. Free to start.',
- alternates: { canonical: 'https://travel.wizelife.ai/' },
+ alternates: {
+    canonical: 'https://travel.wizelife.ai/',
+    languages: {
+      he: 'https://travel.wizelife.ai/?lang=he',
+      en: 'https://travel.wizelife.ai/?lang=en',
+      pt: 'https://travel.wizelife.ai/?lang=pt',
+      es: 'https://travel.wizelife.ai/?lang=es',
+    },
+  },
  openGraph: {
    type: 'website',
    url: 'https://travel.wizelife.ai/',
