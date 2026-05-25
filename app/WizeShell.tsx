@@ -322,7 +322,7 @@ export default function WizeShell({ children }: { children: ReactNode }) {
                     color: isActive ? '#06b6d4' : (isLight ? '#475569' : '#94a3b8'),
                     background: isActive ? (isLight ? 'rgba(6,182,212,0.08)' : 'rgba(6,182,212,0.12)') : 'transparent',
                     border: isActive ? '1px solid rgba(6,182,212,0.3)' : '1px solid transparent',
-                    transition: 'all .15s',
+                    transition: 'color .15s, background-color .15s, border-color .15s',
                   }}>
                     <span style={{ width: 16, height: 16, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{item.icon}</span>
                     <span>{item.labels[lang]}</span>
@@ -354,7 +354,7 @@ export default function WizeShell({ children }: { children: ReactNode }) {
                           color: isLight ? '#64748b' : '#94a3b8',
                           borderRadius: 6,
                           textDecoration: 'none',
-                          transition: 'all .15s',
+                          transition: 'color .15s, background-color .15s, border-color .15s',
                         }}
                         onMouseEnter={(e) => { e.currentTarget.style.background = isLight ? 'rgba(6,182,212,0.06)' : 'rgba(6,182,212,0.08)'; e.currentTarget.style.color = '#67e8f9'; }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = isLight ? '#64748b' : '#94a3b8'; }}
@@ -384,7 +384,7 @@ export default function WizeShell({ children }: { children: ReactNode }) {
               fontSize: 13, fontWeight: 600, cursor: 'pointer',
               color: isLight ? '#475569' : '#94a3b8',
               background: 'transparent', border: '1px solid transparent',
-              transition: 'all .15s', width: '100%', textAlign: 'start',
+              transition: 'color .15s, background-color .15s, border-color .15s', width: '100%', textAlign: 'start',
             }}
           >
             <span style={{ width: 16, height: 16, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>↗️</span>
