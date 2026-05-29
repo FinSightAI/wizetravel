@@ -66,6 +66,23 @@
   });
   // wl_token rides in the fragment so it never reaches server / CF logs.
   var tok = hp.get('wl_token') || p.get('wl_token');
+  if (tok) {
+    try {
+      var _st = JSON.parse(localStorage.getItem('wl_sso') || '{}');
+      _st.token = tok;
+      try {
+        var _pl = JSON.parse(atob(tok.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+        if (_pl.email) _st.email = _pl.email;
+        if (_pl.user_id) _st.uid = _pl.user_id;
+      } catch(e) {}
+      var nick = hp.get('wl_nick') || p.get('wl_nick');
+      if (nick) _st.nick = decodeURIComponent(nick);
+      var plan = hp.get('wl_plan') || p.get('wl_plan');
+      if (plan && ['pro','yolo','free'].includes(plan)) _st.plan = plan;
+      localStorage.setItem('wl_sso', JSON.stringify(_st));
+    } catch(e) {}
+    if (history.replaceState) history.replaceState(null, '', location.pathname + (qs.toString() ? '?' + qs.toString() : ''));
+  }
   var iframe = document.getElementById('app-frame');
   var src = TARGET + (qs.toString() ? '?' + qs.toString() : '');
   if (tok) src += '#wl_token=' + encodeURIComponent(tok);
